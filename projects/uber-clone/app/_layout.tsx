@@ -3,8 +3,16 @@ import '../global.css'
 import { SplashScreen, Stack } from 'expo-router'
 import { useEffect } from 'react'
 
+import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo'
+import { tokenCache } from '@/lib/auth'
+import { LogBox } from 'react-native'
+
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
+
+LogBox.ignoreLogs(['Clerk:'])
 
 const RootLayout = () => {
   const [loaded] = useFonts({
@@ -17,6 +25,12 @@ const RootLayout = () => {
     'Jakarta-SemiBold': require('../assets/fonts/PlusJakartaSans-SemiBold.ttf'),
   })
 
+  if (!publishableKey) {
+    throw new Error(
+      'Missing Publishable Key. Please set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env',
+    )
+  }
+
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync()
@@ -28,9 +42,15 @@ const RootLayout = () => {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name='index' options={{ headerShown: false }} />
-    </Stack>
+    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+      <ClerkLoaded>
+        <Stack>
+          <Stack.Screen name='index' options={{ headerShown: false }} />
+          <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+          <Stack.Screen name='(root)' options={{ headerShown: false }} />
+        </Stack>
+      </ClerkLoaded>
+    </ClerkProvider>
   )
 }
 
