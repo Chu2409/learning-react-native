@@ -14,7 +14,8 @@
       "backgroundColor": "#2F80ED"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.chu2409.uberclone"
     },
     "android": {
       "adaptiveIcon": {

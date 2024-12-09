@@ -1,7 +1,7 @@
 import { icons } from '@/constants'
 import { useFetch } from '@/lib/fetch'
 import {
-  calculateDriverTimes2,
+  calculateDriverTimes,
   calculateRegion,
   generateMarkersFromData,
   getRouteCoordinates,
@@ -45,7 +45,7 @@ const Map = () => {
       destinationLatitude != null &&
       destinationLongitude != null
     ) {
-      calculateDriverTimes2({
+      calculateDriverTimes({
         markers,
         userLatitude,
         userLongitude,
