@@ -1,4 +1,4 @@
-import { colors } from './data/colors'
+import { colors } from './constants/colors'
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

@@ -4,7 +4,6 @@ import { images } from '@/constants'
 import { useGlobalContext } from '@/context/GlobalProvider'
 import { getCurrentUser, signIn } from '@/lib/appwrite'
 import { Link, router } from 'expo-router'
-import { useState } from 'react'
 import {
   View,
   Text,
@@ -13,28 +12,37 @@ import {
   Alert,
   KeyboardAvoidingView,
 } from 'react-native'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const signInSchema = z.object({
+  email: z.string().min(1, 'El email es requerido').email('Email inválido'),
+  password: z.string().min(1, 'La contraseña es requerida'),
+})
+
+type SignInFormData = z.infer<typeof signInSchema>
 
 const SignIn = () => {
-  const [form, setform] = useState({
-    email: '',
-    password: '',
-  })
-
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
   const { setUser, setIsLoggedIn } = useGlobalContext()
 
-  const submit = async () => {
-    if (!form.email || !form.password) {
-      Alert.alert('Error', 'Please fill all fields')
-    }
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
 
-    setIsSubmitting(true)
-
+  const onSubmit = async (data: SignInFormData) => {
     try {
       await signIn({
-        email: form.email,
-        password: form.password,
+        email: data.email,
+        password: data.password,
       })
       const result = await getCurrentUser()
       setUser(result)
@@ -44,8 +52,6 @@ const SignIn = () => {
       router.replace('/home')
     } catch (error: any) {
       Alert.alert('Error', error.message)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
@@ -64,34 +70,26 @@ const SignIn = () => {
           </Text>
 
           <FormField
+            control={control}
+            name='email'
             title='Email'
-            value={form.email}
-            onChangeText={(e) => {
-              setform({
-                ...form,
-                email: e,
-              })
-            }}
             placeholder='dzhu2409@gmail.com'
             keyboardType='email-address'
+            error={errors.email?.message}
           />
 
           <FormField
+            control={control}
+            name='password'
             title='Contraseña'
             isPassword
-            value={form.password}
-            onChangeText={(e) => {
-              setform({
-                ...form,
-                password: e,
-              })
-            }}
             placeholder='********'
+            error={errors.password?.message}
           />
 
           <CustomButton
             title='Ingresar'
-            onPress={submit}
+            onPress={handleSubmit(onSubmit)}
             containerStyles='mt-4'
             disabled={isSubmitting}
           />

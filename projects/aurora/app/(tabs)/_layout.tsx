@@ -1,7 +1,7 @@
 import { Text, Image, View } from 'react-native'
 import { Tabs } from 'expo-router'
 import { icons } from '../../constants'
-import { colors } from '@/data/colors'
+import { colors } from '@/constants/colors'
 
 interface TabIconProps {
   icon: any

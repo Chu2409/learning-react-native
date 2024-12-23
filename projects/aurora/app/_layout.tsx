@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
 import GlobalProvider from '@/context/GlobalProvider'
 import { StatusBar } from 'expo-status-bar'
-import { colors } from '@/data/colors'
+import { colors } from '@/constants/colors'
 
 SplashScreen.preventAutoHideAsync()
 
