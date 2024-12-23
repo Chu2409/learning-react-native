@@ -1,59 +1,19 @@
 import CustomButton from '@/components/CustomButton'
 import FormField from '@/components/FormField'
 import { images } from '@/constants'
-import { useGlobalContext } from '@/context/GlobalProvider'
-import { getCurrentUser, signIn } from '@/lib/appwrite'
-import { Link, router } from 'expo-router'
+import { Link } from 'expo-router'
 import {
   View,
   Text,
   ScrollView,
   Image,
-  Alert,
   KeyboardAvoidingView,
 } from 'react-native'
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-
-const signInSchema = z.object({
-  email: z.string().min(1, 'El email es requerido').email('Email inválido'),
-  password: z.string().min(1, 'La contraseña es requerida'),
-})
-
-type SignInFormData = z.infer<typeof signInSchema>
+import { useSignInForm } from '@/hooks/useSignInForm'
 
 const SignIn = () => {
-  const { setUser, setIsLoggedIn } = useGlobalContext()
-
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting, errors },
-  } = useForm<SignInFormData>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  })
-
-  const onSubmit = async (data: SignInFormData) => {
-    try {
-      await signIn({
-        email: data.email,
-        password: data.password,
-      })
-      const result = await getCurrentUser()
-      setUser(result)
-      setIsLoggedIn(true)
-
-      Alert.alert('Success', 'Logged in successfully')
-      router.replace('/home')
-    } catch (error: any) {
-      Alert.alert('Error', error.message)
-    }
-  }
+  const { control, handleSubmit, onSubmit, isSubmitting, errors } =
+    useSignInForm()
 
   return (
     <KeyboardAvoidingView>
@@ -66,7 +26,7 @@ const SignIn = () => {
           />
 
           <Text className='text-2xl text-white mt-4 font-psemibold'>
-            Ingresar a Aora
+            Ingresar en Aora
           </Text>
 
           <FormField
