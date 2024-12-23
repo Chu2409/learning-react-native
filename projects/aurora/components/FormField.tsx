@@ -1,47 +1,50 @@
 import { icons } from '@/constants'
 import { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  TextInputProps,
+  Pressable,
+} from 'react-native'
+
+interface Props extends TextInputProps {
+  title: string
+  className?: string
+  isPassword?: boolean
+}
 
 const FormField = ({
   title,
-  value,
-  placeholder,
-  handleChangeText,
-  otherStyles,
-  ...props
-}: {
-  title: string
-  value: string
-  placeholder?: string
-  handleChangeText: (e: string) => void
-  otherStyles?: string
-  [key: string]: any
-}) => {
+  onChangeText,
+  className,
+  isPassword,
+  ...rest
+}: Props) => {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <View className={`space-y-2 ${otherStyles}`}>
+    <View className={`gap-y-2 ${className}`}>
       <Text className='text-base text-gray-100 font-pmedium'>{title}</Text>
 
-      <View className='w-full h-16 px-4 bg-black-100 rounded-2xl border-2 border-black-200 focus:border-secondary flex flex-row items-center'>
+      <View className='relative flex-row'>
         <TextInput
-          className='flex-1 text-white font-psemibold text-base'
-          value={value}
-          placeholder={placeholder}
+          {...rest}
+          className='flex-1 text-white font-psemibold text-base w-full h-16 px-4 bg-black-100 rounded-2xl border border-black-200 focus:border-secondary'
           placeholderTextColor='#7B7B8B'
-          onChangeText={handleChangeText}
-          secureTextEntry={title === 'Password' && !showPassword}
-          {...props}
+          onChangeText={onChangeText}
+          secureTextEntry={isPassword && !showPassword}
         />
 
-        {title === 'Password' && (
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+        {isPassword && (
+          <Pressable onPress={() => setShowPassword(!showPassword)}>
             <Image
               source={!showPassword ? icons.eye : icons.eyeHide}
-              className='w-6 h-6'
+              className='w-6 h-6 absolute right-4 top-5'
               resizeMode='contain'
             />
-          </TouchableOpacity>
+          </Pressable>
         )}
       </View>
     </View>

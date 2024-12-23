@@ -5,8 +5,14 @@ import { useGlobalContext } from '@/context/GlobalProvider'
 import { getCurrentUser, signIn } from '@/lib/appwrite'
 import { Link, router } from 'expo-router'
 import { useState } from 'react'
-import { View, Text, ScrollView, Image, Alert } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Alert,
+  KeyboardAvoidingView,
+} from 'react-native'
 
 const SignIn = () => {
   const [form, setform] = useState({
@@ -44,66 +50,67 @@ const SignIn = () => {
   }
 
   return (
-    <SafeAreaView className='bg-primary h-full'>
-      <ScrollView>
-        <View className='w-full justify-center min-h-[85vh] px-4 my-6'>
+    <KeyboardAvoidingView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View className='w-full justify-center min-h-[85vh] px-6 gap-8'>
           <Image
             source={images.logo}
             resizeMode='contain'
             className='w-[115px] h-[35px]'
           />
 
-          <Text className='text-2xl text-white mt-10 font-psemibold'>
-            Log in to Aora
+          <Text className='text-2xl text-white mt-4 font-psemibold'>
+            Ingresar a Aora
           </Text>
 
           <FormField
             title='Email'
             value={form.email}
-            handleChangeText={(e) => {
+            onChangeText={(e) => {
               setform({
                 ...form,
                 email: e,
               })
             }}
-            otherStyles='mt-7'
+            placeholder='dzhu2409@gmail.com'
             keyboardType='email-address'
           />
 
           <FormField
-            title='Password'
+            title='Contraseña'
+            isPassword
             value={form.password}
-            handleChangeText={(e) => {
+            onChangeText={(e) => {
               setform({
                 ...form,
                 password: e,
               })
             }}
-            otherStyles='mt-7'
+            placeholder='********'
           />
 
           <CustomButton
-            title='Sign In'
-            handlePress={submit}
-            className='mt-7'
-            isLoading={isSubmitting}
+            title='Ingresar'
+            onPress={submit}
+            containerStyles='mt-4'
+            disabled={isSubmitting}
           />
 
           <View className='justify-center pt-5 flex-row gap-2'>
             <Text className='text-lg text-gray-100 font-pregular'>
-              Don't have account?
+              ¿No tienes una cuenta?
             </Text>
 
             <Link
               href={'/sign-up'}
               className='text-lg font-psemibold text-secondary'
             >
-              Sign Up
+              Regístrate
             </Link>
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   )
 }
 

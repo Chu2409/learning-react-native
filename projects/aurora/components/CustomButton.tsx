@@ -1,29 +1,30 @@
-import { Text, TouchableOpacity } from 'react-native'
+import { Pressable, PressableProps, Text } from 'react-native'
+
+interface Props extends PressableProps {
+  title: string
+  containerStyles?: string
+  textStyles?: string
+}
 
 const CustomButton = ({
   title,
-  handlePress,
-  className,
+  onPress,
+  containerStyles,
   textStyles,
-  isLoading,
-}: {
-  title: string
-  handlePress: () => void
-  className?: string
-  textStyles?: string
-  isLoading?: boolean
-}) => {
+  disabled,
+  ...rest
+}: Props) => {
   return (
-    <TouchableOpacity
-      onPress={handlePress}
-      activeOpacity={0.7}
-      className={`bg-secondary rounded-xl min-h-[58px] justify-center items-center ${isLoading ? 'opacity-50' : ''} ${className}`}
-      disabled={isLoading}
+    <Pressable
+      {...rest}
+      disabled={disabled}
+      onPress={onPress}
+      className={`bg-secondary rounded-xl min-h-[58px] justify-center active:opacity-70 items-center ${disabled ? 'opacity-50' : ''} ${containerStyles}`}
     >
       <Text className={`text-primary font-psemibold text-lg ${textStyles}`}>
         {title}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   )
 }
 

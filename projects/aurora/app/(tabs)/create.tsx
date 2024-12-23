@@ -98,13 +98,13 @@ const Create = () => {
           title='Video Title'
           value={form.title}
           placeholder='Give your video a catchy title...'
-          handleChangeText={(e) =>
+          onChangeText={(e) =>
             setForm({
               ...form,
               title: e,
             })
           }
-          otherStyles='mt-10'
+          className='mt-10'
         />
 
         <View className='mt-7 space-y-2'>
@@ -165,20 +165,20 @@ const Create = () => {
           title='AI Prompt'
           value={form.prompt}
           placeholder='The prompt you used to generate this video'
-          handleChangeText={(e) =>
+          onChangeText={(e) =>
             setForm({
               ...form,
               prompt: e,
             })
           }
-          otherStyles='mt-7'
+          className='mt-7'
         />
 
         <CustomButton
           title='Submit & Publish'
-          handlePress={submit}
-          className='mt-7'
-          isLoading={uploading}
+          onPress={submit}
+          containerStyles='mt-7'
+          disabled={uploading}
         />
       </ScrollView>
     </SafeAreaView>

@@ -1,3 +1,5 @@
+import { colors } from './data/colors'
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./app/**/*.{js,jsx,ts,tsx}', './components/**/*.{js,jsx,ts,tsx}'],
@@ -5,19 +7,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#161622',
+        primary: colors.primary,
         secondary: {
-          DEFAULT: '#FF9C01',
-          100: '#FF9001',
-          200: '#FF8E01',
+          DEFAULT: colors.secondary.DEFAULT,
+          100: colors.secondary[100],
+          200: colors.secondary[200],
         },
         black: {
-          DEFAULT: '#000',
-          100: '#1E1E2D',
-          200: '#232533',
+          DEFAULT: colors.black.DEFAULT,
+          100: colors.black[100],
+          200: colors.black[200],
         },
         gray: {
-          100: '#CDCDE0',
+          100: colors.gray[100],
         },
       },
       fontFamily: {

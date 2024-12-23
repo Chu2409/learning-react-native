@@ -1,6 +1,7 @@
 import { Text, Image, View } from 'react-native'
 import { Tabs } from 'expo-router'
 import { icons } from '../../constants'
+import { colors } from '@/data/colors'
 
 interface TabIconProps {
   icon: any
@@ -38,7 +39,7 @@ const TabsLayout = () => {
           tabBarActiveTintColor: '#FFA001',
           tabBarInactiveTintColor: '#CDCDE0',
           tabBarStyle: {
-            backgroundColor: '#161622',
+            backgroundColor: colors.primary,
             borderTopWidth: 1,
             borderTopColor: '#232533',
             height: 70,

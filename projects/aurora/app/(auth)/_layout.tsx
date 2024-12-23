@@ -1,18 +1,18 @@
+import { colors } from '@/data/colors'
 import { Stack } from 'expo-router'
 
 const AuthLayout = () => {
   return (
-    <>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name='sign-in' />
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        contentStyle: { backgroundColor: colors.primary, height: '100%' },
+      }}
+    >
+      <Stack.Screen name='sign-in' />
 
-        <Stack.Screen name='sign-up' />
-      </Stack>
-    </>
+      <Stack.Screen name='sign-up' />
+    </Stack>
   )
 }
 

@@ -60,45 +60,45 @@ const SignUp = () => {
           <FormField
             title='Username'
             value={form.username}
-            handleChangeText={(e) => {
+            onChangeText={(e) => {
               setform({
                 ...form,
                 username: e,
               })
             }}
-            otherStyles='mt-7'
+            className='mt-7'
           />
 
           <FormField
             title='Email'
             value={form.email}
-            handleChangeText={(e) => {
+            onChangeText={(e) => {
               setform({
                 ...form,
                 email: e,
               })
             }}
-            otherStyles='mt-7'
+            className='mt-7'
             keyboardType='email-address'
           />
 
           <FormField
             title='Password'
             value={form.password}
-            handleChangeText={(e) => {
+            onChangeText={(e) => {
               setform({
                 ...form,
                 password: e,
               })
             }}
-            otherStyles='mt-7'
+            className='mt-7'
           />
 
           <CustomButton
             title='Sign Up'
-            handlePress={submit}
-            className='mt-7'
-            isLoading={isSubmitting}
+            onPress={submit}
+            containerStyles='mt-7'
+            disabled={isSubmitting}
           />
 
           <View className='justify-center pt-5 flex-row gap-2'>

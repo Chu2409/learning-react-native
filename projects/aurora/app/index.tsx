@@ -1,6 +1,6 @@
 import CustomButton from '@/components/CustomButton'
 import { images } from '@/constants'
-import { Image, Text, View } from 'react-native'
+import { Image, SafeAreaView, Text, View } from 'react-native'
 import { Redirect, router } from 'expo-router'
 import { useGlobalContext } from '@/context/GlobalProvider'
 
@@ -10,7 +10,7 @@ const App = () => {
   if (!isLoading && isLoggedIn) return <Redirect href='/home' />
 
   return (
-    <View className='w-full justify-center items-center h-full px-4 pb-10'>
+    <SafeAreaView className='justify-center items-center min-h-[85vh] px-6'>
       <Image
         source={images.logo}
         className='w-[130px] h-[84px]'
@@ -43,10 +43,10 @@ const App = () => {
 
       <CustomButton
         title='Comenzar'
-        handlePress={() => router.push('/sign-in')}
-        className='w-full mt-4'
+        onPress={() => router.push('/sign-in')}
+        containerStyles='w-full mt-4'
       />
-    </View>
+    </SafeAreaView>
   )
 }
 
