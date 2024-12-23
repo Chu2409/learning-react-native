@@ -1,8 +1,9 @@
-import { SplashScreen, Stack } from 'expo-router'
 import '../global.css'
+import { SplashScreen, Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
 import GlobalProvider from '@/context/GlobalProvider'
+import { StatusBar } from 'expo-status-bar'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -31,6 +32,7 @@ const RootLayout = () => {
       <Stack
         screenOptions={{
           headerShown: false,
+          contentStyle: { backgroundColor: '#161622' },
         }}
       >
         <Stack.Screen name='index' />
@@ -41,6 +43,8 @@ const RootLayout = () => {
 
         <Stack.Screen name='search/[query]' />
       </Stack>
+
+      <StatusBar backgroundColor='#161622' style='light' />
     </GlobalProvider>
   )
 }
