@@ -12,8 +12,6 @@ export const getUserBookmaks = async (
       [Query.orderDesc('$createdAt'), Query.equal('user', userId)],
     )
 
-    console.log(bookmarks)
-
     return bookmarks.documents
   } catch (error: any) {
     throw new Error('Error al obtener los posts', error)
