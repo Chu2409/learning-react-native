@@ -11,13 +11,15 @@ const VideoCard = ({
     video,
     creator: { username, avatar },
   },
+  className,
 }: {
   video: AppwriteVideo
+  className?: string
 }) => {
   const [play, setPlay] = useState(false)
 
   return (
-    <View className='mb-10 gap-3'>
+    <View className={`mb-10 gap-3 ${className}`}>
       <View className='flex-row gap-3 items-start'>
         <View className='justify-center items-center flex-row flex-1'>
           <View className='w-[46px] h-[46px] rounded-lg border border-secondary justify-center items-center p-0.5'>

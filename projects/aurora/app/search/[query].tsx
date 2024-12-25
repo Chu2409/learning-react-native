@@ -25,28 +25,33 @@ const Search = () => {
   }, [query])
 
   return (
-    <SafeAreaView className='bg-primary h-full'>
+    <SafeAreaView>
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <VideoCard video={item} />}
+        renderItem={({ item }) => <VideoCard video={item} className='px-4' />}
         ListHeaderComponent={() => (
-          <View className='my-6 px-4'>
-            <Text className='font-pmedium text-sm text-gray-100'>
-              Search Results
+          <View className='my-6'>
+            <Text className='font-pmedium text-sm text-gray-100 px-4'>
+              Resultados de búsqueda
             </Text>
 
-            <Text className='text-2xl font-psemibold text-white'>{query}</Text>
+            <Text className='text-2xl font-psemibold text-white px-4'>
+              {query}
+            </Text>
 
-            <View className='mt-6 mb-8'>
-              <SearchInput initialQuery={query as string} />
+            <View className='my-6'>
+              <SearchInput
+                initialQuery={query as string}
+                containerClassName='px-4'
+              />
             </View>
           </View>
         )}
         ListEmptyComponent={() => (
           <EmptyState
-            title='No videos found'
-            subtitle='No videos found for the search query'
+            title='No hay videos'
+            subtitle='Intenta con otro término de búsqueda'
           />
         )}
       />

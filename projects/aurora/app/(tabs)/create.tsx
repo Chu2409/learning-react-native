@@ -2,125 +2,59 @@ import CustomButton from '@/components/CustomButton'
 import FormField from '@/components/FormField'
 import { icons } from '@/constants'
 import { ResizeMode, Video } from 'expo-av'
-import { useState } from 'react'
 import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
   Image,
-  Alert,
+  KeyboardAvoidingView,
+  Pressable,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import * as ImagePicker from 'expo-image-picker'
-import { router } from 'expo-router'
-import { createVideo } from '@/lib/appwrite'
-import { useGlobalContext } from '@/context/GlobalProvider'
-
-export interface PostForm {
-  title: string
-  video: ImagePicker.ImagePickerAsset | null
-  thumbnail: ImagePicker.ImagePickerAsset | null
-  prompt: string
-  userId?: string
-}
+import { useCreateVideoForm } from '@/hooks/useCreateVideo'
 
 const Create = () => {
-  const { user } = useGlobalContext()
-  const [uploading, setUploading] = useState(false)
-
-  const [form, setForm] = useState<PostForm>({
-    title: '',
-    video: null,
-    thumbnail: null,
-    prompt: '',
-  })
-
-  const openPicker = async (selectType: 'video' | 'image') => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: selectType === 'image' ? 'images' : 'videos',
-      aspect: [4, 3],
-      quality: 1,
-    })
-
-    if (!result.canceled) {
-      if (selectType === 'image') {
-        setForm({
-          ...form,
-          thumbnail: result.assets[0],
-        })
-      }
-
-      if (selectType === 'video') {
-        setForm({
-          ...form,
-          video: result.assets[0],
-        })
-      }
-    }
-  }
-
-  const submit = async () => {
-    if (!form.prompt || !form.title || !form.video || !form.thumbnail) {
-      return Alert.alert('All fields are required')
-    }
-
-    setUploading(true)
-
-    try {
-      await createVideo({
-        ...form,
-        userId: user?.$id,
-      })
-
-      Alert.alert('Success', 'Post uploaded successfully')
-      router.push('/home')
-    } catch (error: any) {
-      Alert.alert('An error occurred', error.message)
-    } finally {
-      setForm({
-        title: '',
-        video: null,
-        thumbnail: null,
-        prompt: '',
-      })
-
-      setUploading(false)
-    }
-  }
+  const {
+    control,
+    handleSubmit,
+    onSubmit,
+    isSubmitting,
+    errors,
+    selectImage,
+    selectVideo,
+    video,
+    thumbnail,
+  } = useCreateVideoForm()
 
   return (
-    <SafeAreaView className='bg-primary h-full'>
-      <ScrollView className='px-4 my-6'>
-        <Text className='text-2xl text-white font-psemibold'>Upload Video</Text>
+    <KeyboardAvoidingView className='my-safe h-full'>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerClassName='gap-6 flex-grow px-4 pt-8 pb-20'
+      >
+        <Text className='text-2xl text-white font-psemibold'>Cargar Video</Text>
 
         <FormField
-          title='Video Title'
-          value={form.title}
-          placeholder='Give your video a catchy title...'
-          onChangeText={(e) =>
-            setForm({
-              ...form,
-              title: e,
-            })
-          }
-          className='mt-10'
+          control={control}
+          name='title'
+          title='Título'
+          placeholder='Capibara escribiendo código'
+          error={errors.title?.message}
         />
 
-        <View className='mt-7 space-y-2'>
+        <View className='gap-2'>
           <Text className='text-base text-gray-100 font-pmedium'>
-            Upload Video
+            Subir Video
           </Text>
 
-          <TouchableOpacity onPress={() => openPicker('video')}>
-            {form.video ? (
+          <Pressable onPress={selectVideo} className='active:opacity-50'>
+            {video !== '' ? (
               <Video
-                source={{ uri: form.video.uri }}
+                source={{ uri: video }}
                 style={{ width: '100%', height: 256, borderRadius: 16 }}
                 resizeMode={ResizeMode.COVER}
               />
             ) : (
-              <View className='w-full h-40 px-4 bg-black-100 rounded-2xl justify-center items-center'>
+              <View className='w-full h-52 px-4 bg-black-100 rounded-2xl justify-center items-center'>
                 <View className='w-14 h-14 border border-dashed border-secondary-100 justify-center items-center'>
                   <Image
                     source={icons.upload}
@@ -130,18 +64,24 @@ const Create = () => {
                 </View>
               </View>
             )}
-          </TouchableOpacity>
+
+            {errors?.video?.message && (
+              <Text className='text-red-500 text-sm font-pregular pt-2'>
+                {errors.video.message}
+              </Text>
+            )}
+          </Pressable>
         </View>
 
-        <View className='mt-7 space-y-2'>
+        <View className='gap-2'>
           <Text className='text-base text-gray-100 font-pmedium'>
-            Thumbnail Image
+            Imágen de portada
           </Text>
 
-          <TouchableOpacity onPress={() => openPicker('image')}>
-            {form.thumbnail ? (
+          <Pressable onPress={selectImage} className='active:opacity-50'>
+            {thumbnail !== '' ? (
               <Image
-                source={{ uri: form.thumbnail.uri }}
+                source={{ uri: thumbnail }}
                 resizeMode='cover'
                 className='w-full h-64 rounded-xl'
               />
@@ -154,34 +94,35 @@ const Create = () => {
                 />
 
                 <Text className='text-sm text-gray-100 font-pmedium'>
-                  Choose a file
+                  Elige una imagen
                 </Text>
               </View>
             )}
-          </TouchableOpacity>
+
+            {errors?.thumbnail?.message && (
+              <Text className='text-red-500 text-sm font-pregular pt-2'>
+                {errors.thumbnail.message}
+              </Text>
+            )}
+          </Pressable>
         </View>
 
         <FormField
-          title='AI Prompt'
-          value={form.prompt}
-          placeholder='The prompt you used to generate this video'
-          onChangeText={(e) =>
-            setForm({
-              ...form,
-              prompt: e,
-            })
-          }
-          className='mt-7'
+          control={control}
+          name='prompt'
+          title='Descripción IA'
+          placeholder='Genera un capibara escribiendo código'
+          error={errors.prompt?.message}
         />
 
         <CustomButton
-          title='Submit & Publish'
-          onPress={submit}
-          containerStyles='mt-7'
-          disabled={uploading}
+          title='Publicar'
+          onPress={handleSubmit(onSubmit)}
+          containerStyles='mt-4'
+          disabled={isSubmitting}
         />
       </ScrollView>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   )
 }
 

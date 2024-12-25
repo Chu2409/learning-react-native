@@ -1,4 +1,5 @@
 import { PostForm } from '@/app/(tabs)/create'
+import { CreateVideoFormData } from '@/hooks/useCreateVideo'
 import { ImagePickerAsset } from 'expo-image-picker'
 import {
   ID,
@@ -278,7 +279,11 @@ export const uploadFile = async (
   }
 }
 
-export const createVideo = async (form: PostForm) => {
+interface CreateVideoParams extends CreateVideoFormData {
+  userId: string
+}
+
+export const createVideo = async (form: CreateVideoParams) => {
   try {
     const [thumbnailUrl, videoUrl] = await Promise.all([
       uploadFile(form.thumbnail, 'image'),

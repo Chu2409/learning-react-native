@@ -26,14 +26,14 @@ const Home = () => {
   }
 
   return (
-    <SafeAreaView className='bg-primary h-full px-4'>
+    <SafeAreaView>
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <VideoCard video={item} />}
+        renderItem={({ item }) => <VideoCard video={item} className='px-4' />}
         ListHeaderComponent={() => (
           <View className='mt-6'>
-            <View className='justify-between items-start flex-row mb-6'>
+            <View className='justify-between items-start flex-row mb-6 px-4'>
               <View>
                 <Text className='font-pmedium text-sm text-gray-100'>
                   Bienvenido de vuelta,
@@ -53,10 +53,10 @@ const Home = () => {
               </View>
             </View>
 
-            <SearchInput />
+            <SearchInput containerClassName='px-4' />
 
             <View className='w-full flex-1 pt-5 pb-8'>
-              <Text className='text-gray-100 text-lg font-pregular'>
+              <Text className='text-gray-100 text-lg font-pregular px-4'>
                 Últimos videos
               </Text>
 

@@ -7,7 +7,7 @@ import { AppwriteVideo, getUserPosts } from '@/lib/appwrite'
 import useAppwrite from '@/lib/use-appwrite'
 import { router } from 'expo-router'
 import { useCallback } from 'react'
-import { View, FlatList, TouchableOpacity, Image } from 'react-native'
+import { View, FlatList, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Profile = () => {
@@ -26,14 +26,14 @@ const Profile = () => {
   }
 
   return (
-    <SafeAreaView className='bg-primary h-full'>
+    <SafeAreaView>
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <VideoCard video={item} />}
+        renderItem={({ item }) => <VideoCard video={item} className='px-4' />}
         ListHeaderComponent={() => (
           <View className='w-full justify-center items-center mt-6 mb-12 px-4'>
-            <TouchableOpacity
+            <Pressable
               className='w-full items-end mb-10'
               onPress={handleLogout}
             >
@@ -42,7 +42,7 @@ const Profile = () => {
                 resizeMode='contain'
                 className='w-6 h-6'
               />
-            </TouchableOpacity>
+            </Pressable>
 
             <View className='w-16 h-16 border border-secondary rounded-lg justify-center items-center'>
               <Image
@@ -76,8 +76,8 @@ const Profile = () => {
         )}
         ListEmptyComponent={() => (
           <EmptyState
-            title='No videos found'
-            subtitle='No videos found for the search query'
+            title='No existen videos'
+            subtitle='Sube tu primer video'
           />
         )}
       />

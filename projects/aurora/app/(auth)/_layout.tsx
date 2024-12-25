@@ -6,7 +6,10 @@ const AuthLayout = () => {
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: colors.primary, height: '100%' },
+        contentStyle: {
+          backgroundColor: colors.primary,
+          paddingHorizontal: 16,
+        },
       }}
     >
       <Stack.Screen name='sign-in' />

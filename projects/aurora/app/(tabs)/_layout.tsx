@@ -21,6 +21,7 @@ const TabsLayout = () => {
           fontSize: 11,
         },
         tabBarHideOnKeyboard: true,
+        sceneStyle: { backgroundColor: colors.primary },
       }}
     >
       <Tabs.Screen
