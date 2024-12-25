@@ -4,16 +4,18 @@ import Trending from '@/components/Trending'
 import VideoCard from '@/components/VideoCard'
 import { images } from '@/constants'
 import { useGlobalContext } from '@/context/GlobalProvider'
-import { AppwriteVideo, getAllPosts, getLatestPosts } from '@/lib/appwrite'
-import useAppwrite from '@/lib/use-appwrite'
+import useAppwrite from '@/hooks/useAppwrite'
 import { useState } from 'react'
 import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { getAllVideos } from '@/lib/get-all-videos'
+import { getLatestVideos } from '@/lib/get-latest-videos'
+import { AppwriteVideo } from '@/interfaces/video.interface'
 
 const Home = () => {
   const { user } = useGlobalContext()
-  const { data: posts, refetch } = useAppwrite<AppwriteVideo>(getAllPosts)
-  const { data: latestPosts } = useAppwrite<AppwriteVideo>(getLatestPosts)
+  const { data: posts, refetch } = useAppwrite<AppwriteVideo>(getAllVideos)
+  const { data: latestPosts } = useAppwrite<AppwriteVideo>(getLatestVideos)
 
   const [refreshing, setRefreshing] = useState(false)
 

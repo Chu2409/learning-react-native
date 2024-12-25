@@ -4,10 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Alert } from 'react-native'
 import { useGlobalContext } from '@/context/GlobalProvider'
-import { createVideo } from '@/lib/appwrite'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
+import { createVideo } from '@/lib/create-video'
 
 const createVideoSchema = z.object({
   title: z.string().min(1, 'El título es requerido'),

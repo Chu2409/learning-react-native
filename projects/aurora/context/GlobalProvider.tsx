@@ -1,5 +1,7 @@
 import { AppwriteUser } from '@/interfaces/user.interface'
-import { getCurrentUser, signIn, signOut } from '@/lib/appwrite'
+import { getCurrentUser } from '@/lib/get-current-user'
+import { signIn } from '@/lib/sign-in'
+import { signOut } from '@/lib/sign-out'
 import { createContext, useContext, useState, useEffect } from 'react'
 
 interface AuthContextState {

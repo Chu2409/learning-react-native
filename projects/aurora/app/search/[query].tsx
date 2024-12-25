@@ -1,18 +1,19 @@
 import EmptyState from '@/components/EmptyState'
 import SearchInput from '@/components/SearchInput'
 import VideoCard from '@/components/VideoCard'
-import { AppwriteVideo, searchPosts } from '@/lib/appwrite'
-import useAppwrite from '@/lib/use-appwrite'
+import useAppwrite from '@/hooks/useAppwrite'
 import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useEffect } from 'react'
 import { View, Text, FlatList } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { searchVideos } from '@/lib/search-videos'
+import { AppwriteVideo } from '@/interfaces/video.interface'
 
 const Search = () => {
   const { query } = useLocalSearchParams()
 
   const searchPostsMemoized = useCallback(
-    () => searchPosts(query as string),
+    () => searchVideos(query as string),
     [query],
   )
 

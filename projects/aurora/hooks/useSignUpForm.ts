@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Alert } from 'react-native'
 import { useGlobalContext } from '@/context/GlobalProvider'
-import { createUser } from '@/lib/appwrite'
 import { router } from 'expo-router'
+import { createUser } from '@/lib/create-user'
 
 const signUpSchema = z.object({
   username: z.string().min(1, 'El nombre de usuario es requerido'),

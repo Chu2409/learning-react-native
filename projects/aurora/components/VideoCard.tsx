@@ -1,5 +1,5 @@
 import { icons } from '@/constants'
-import { AppwriteVideo } from '@/lib/appwrite'
+import { AppwriteVideo } from '@/interfaces/video.interface'
 import { ResizeMode, Video } from 'expo-av'
 import { useState } from 'react'
 import { View, Text, Image, Pressable } from 'react-native'

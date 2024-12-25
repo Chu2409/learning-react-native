@@ -3,8 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Alert } from 'react-native'
 import { useGlobalContext } from '@/context/GlobalProvider'
-import { getCurrentUser, signIn } from '@/lib/appwrite'
 import { router } from 'expo-router'
+import { signIn } from '@/lib/sign-in'
+import { getCurrentUser } from '@/lib/get-current-user'
 
 const signInSchema = z.object({
   email: z.string().min(1, 'El email es requerido').email('Email inválido'),
@@ -30,10 +31,7 @@ export const useSignInForm = () => {
 
   const onSubmit = async (data: SignInFormData) => {
     try {
-      await signIn({
-        email: data.email,
-        password: data.password,
-      })
+      await signIn(data)
       const result = await getCurrentUser()
       setUser(result)
       setIsLoggedIn(true)

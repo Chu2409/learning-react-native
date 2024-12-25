@@ -3,18 +3,19 @@ import InfoBox from '@/components/InfoBox'
 import VideoCard from '@/components/VideoCard'
 import { icons } from '@/constants'
 import { useGlobalContext } from '@/context/GlobalProvider'
-import { AppwriteVideo, getUserPosts } from '@/lib/appwrite'
-import useAppwrite from '@/lib/use-appwrite'
+import useAppwrite from '@/hooks/useAppwrite'
 import { router } from 'expo-router'
 import { useCallback } from 'react'
 import { View, FlatList, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { getUserVideos } from '@/lib/get-user-videos'
+import { AppwriteVideo } from '@/interfaces/video.interface'
 
 const Profile = () => {
   const { user, logout } = useGlobalContext()
 
   const searchPostsMemoized = useCallback(
-    () => getUserPosts(user?.$id as string),
+    () => getUserVideos(user?.$id as string),
     [user?.$id],
   )
 

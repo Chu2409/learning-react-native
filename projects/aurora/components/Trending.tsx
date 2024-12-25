@@ -1,5 +1,4 @@
 import { icons } from '@/constants'
-import { AppwriteVideo } from '@/lib/appwrite'
 import { useState } from 'react'
 import {
   ImageBackground,
@@ -11,6 +10,7 @@ import {
 import { Video, ResizeMode } from 'expo-av'
 import Carousel from 'react-native-reanimated-carousel'
 import { useSharedValue } from 'react-native-reanimated'
+import { AppwriteVideo } from '@/interfaces/video.interface'
 
 const TrendingItem = ({ item }: { item: AppwriteVideo }) => {
   const [play, setPlay] = useState(false)
