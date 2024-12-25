@@ -2,51 +2,21 @@ import { icons } from '@/constants'
 import { AppwriteVideo } from '@/lib/appwrite'
 import { useState } from 'react'
 import {
-  FlatList,
-  TouchableOpacity,
   ImageBackground,
   Image,
+  useWindowDimensions,
+  View,
+  Pressable,
 } from 'react-native'
-import * as Animatable from 'react-native-animatable'
 import { Video, ResizeMode } from 'expo-av'
+import Carousel from 'react-native-reanimated-carousel'
+import { useSharedValue } from 'react-native-reanimated'
 
-const zoomIn = {
-  0: {
-    scale: 0.9,
-    opacity: 1,
-  },
-  1: {
-    scale: 1.1,
-    opacity: 1,
-  },
-}
-
-const zoomOut = {
-  0: {
-    scale: 1,
-    opacity: 1,
-  },
-  1: {
-    scale: 0.9,
-    opacity: 1,
-  },
-}
-
-const TrendingItem = ({
-  activeItem,
-  item,
-}: {
-  activeItem: string
-  item: AppwriteVideo
-}) => {
+const TrendingItem = ({ item }: { item: AppwriteVideo }) => {
   const [play, setPlay] = useState(false)
 
   return (
-    <Animatable.View
-      className='mr-5'
-      animation={activeItem === item.$id ? zoomIn : zoomOut}
-      duration={500}
-    >
+    <View>
       {play ? (
         <Video
           source={{
@@ -54,9 +24,8 @@ const TrendingItem = ({
           }}
           style={{
             backgroundColor: 'rgb(255 255 255 / 0.1)',
-            width: 208,
-            height: 288,
-            borderRadius: 33,
+            width: 220,
+            height: 275,
           }}
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls
@@ -68,16 +37,15 @@ const TrendingItem = ({
           }}
         />
       ) : (
-        <TouchableOpacity
-          className='relative flex justify-center items-center'
-          activeOpacity={0.7}
+        <Pressable
+          className='relative flex justify-center items-center active:opacity-70'
           onPress={() => setPlay(true)}
         >
           <ImageBackground
             source={{
               uri: item.thumbnail,
             }}
-            className='w-52 h-72 rounded-[33px] my-5 overflow-hidden shadow-lg shadow-black/40'
+            className='w-52 h-72 rounded-[33px] overflow-hidden shadow-lg shadow-black/40'
             resizeMode='cover'
           />
 
@@ -86,32 +54,38 @@ const TrendingItem = ({
             className='w-12 h-12 absolute'
             resizeMode='contain'
           />
-        </TouchableOpacity>
+        </Pressable>
       )}
-    </Animatable.View>
+    </View>
   )
 }
 
 const Trending = ({ posts }: { posts: AppwriteVideo[] }) => {
-  const [activeItem, setActiveItem] = useState('')
+  const width = useWindowDimensions().width
+  const progress = useSharedValue<number>(0)
 
   return (
-    <FlatList
+    <Carousel
       data={posts}
-      keyExtractor={(item) => item.$id}
-      renderItem={({ item }) => (
-        <TrendingItem activeItem={activeItem} item={item} />
-      )}
-      onViewableItemsChanged={({ viewableItems }) => {
-        if (viewableItems.length > 0) {
-          setActiveItem(viewableItems[0].key)
-        }
+      loop
+      renderItem={({ item }) => <TrendingItem item={item} />}
+      width={220}
+      height={250}
+      style={{
+        width: width,
+        height: 250,
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
-      viewabilityConfig={{
-        itemVisiblePercentThreshold: 70,
+      mode='parallax'
+      onProgressChange={(p, a) => {
+        progress.value = p
       }}
-      contentOffset={{ x: 170, y: 0 }}
-      horizontal
+      modeConfig={{
+        parallaxScrollingScale: 0.85,
+        parallaxScrollingOffset: 50,
+      }}
+      defaultIndex={1}
     />
   )
 }

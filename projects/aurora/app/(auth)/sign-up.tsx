@@ -18,7 +18,7 @@ const SignUp = () => {
   return (
     <KeyboardAvoidingView>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className='w-full justify-center min-h-[85vh] px-6 gap-8'>
+        <View className='w-full justify-center min-h-[85vh] px-4 gap-8'>
           <Image
             source={images.logo}
             resizeMode='contain'

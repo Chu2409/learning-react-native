@@ -26,17 +26,17 @@ const Home = () => {
   }
 
   return (
-    <SafeAreaView className='bg-primary h-full'>
+    <SafeAreaView className='bg-primary h-full px-4'>
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => <VideoCard video={item} />}
         ListHeaderComponent={() => (
-          <View className='my-6 px-4 space-y-6'>
+          <View className='mt-6'>
             <View className='justify-between items-start flex-row mb-6'>
               <View>
                 <Text className='font-pmedium text-sm text-gray-100'>
-                  Welcome Back,
+                  Bienvenido de vuelta,
                 </Text>
 
                 <Text className='text-2xl font-psemibold text-white'>
@@ -56,8 +56,8 @@ const Home = () => {
             <SearchInput />
 
             <View className='w-full flex-1 pt-5 pb-8'>
-              <Text className='text-gray-100 text-lg font-pregular mb-3'>
-                Latest Videos
+              <Text className='text-gray-100 text-lg font-pregular'>
+                Últimos videos
               </Text>
 
               <Trending posts={latestPosts} />
@@ -66,8 +66,8 @@ const Home = () => {
         )}
         ListEmptyComponent={() => (
           <EmptyState
-            title='No videos found'
-            subtitle='Be the first one to upload a video'
+            title='No hay videos'
+            subtitle='Se el primero en subir un video'
           />
         )}
         refreshControl={

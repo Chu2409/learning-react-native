@@ -2,7 +2,7 @@ import { icons } from '@/constants'
 import { router } from 'expo-router'
 import { usePathname } from 'expo-router'
 import { useState } from 'react'
-import { View, TextInput, TouchableOpacity, Image, Alert } from 'react-native'
+import { View, TextInput, Image, Alert, Pressable } from 'react-native'
 
 const SearchInput = ({ initialQuery }: { initialQuery?: string }) => {
   const pathname = usePathname()
@@ -10,25 +10,26 @@ const SearchInput = ({ initialQuery }: { initialQuery?: string }) => {
   const [query, setQuery] = useState(() => initialQuery || '')
 
   return (
-    <View className='w-full h-16 px-4 bg-black-100 rounded-2xl border-2 border-black-200 focus:border-secondary flex flex-row items-center space-x-4'>
+    <View className='relative flex-row'>
       <TextInput
-        className='text-base mt-0.5 text-white flex-1 font-pregular'
+        className='text-white flex-1 font-pregular w-full h-16 px-4 bg-black-100 rounded-2xl border-2 border-black-200 focus:border-secondary'
         value={query}
-        placeholder='Search for videos'
+        placeholder='Buscar videos'
         placeholderTextColor='#CDCDE0'
         onChangeText={(e) => setQuery(e)}
       />
 
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
-          if (!query) return Alert.alert('Please enter a search query')
+          if (!query) return Alert.alert('Ingrese un término de búsqueda')
 
           if (pathname.startsWith('/search')) router.setParams({ query })
           else router.push(`/search/${query}`)
         }}
+        className='absolute right-5 top-[18px]'
       >
         <Image source={icons.search} className='w-5 h-5' resizeMode='contain' />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   )
 }

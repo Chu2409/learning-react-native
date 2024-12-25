@@ -51,10 +51,13 @@ const FormField = <T extends FieldValues>({
             />
 
             {isPassword && (
-              <Pressable onPress={() => setShowPassword(!showPassword)}>
+              <Pressable
+                onPress={() => setShowPassword(!showPassword)}
+                className='absolute right-4 top-5'
+              >
                 <Image
                   source={!showPassword ? icons.eye : icons.eyeHide}
-                  className='w-6 h-6 absolute right-4 top-5'
+                  className='w-6 h-6'
                   resizeMode='contain'
                 />
               </Pressable>

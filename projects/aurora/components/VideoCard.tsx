@@ -2,7 +2,7 @@ import { icons } from '@/constants'
 import { AppwriteVideo } from '@/lib/appwrite'
 import { ResizeMode, Video } from 'expo-av'
 import { useState } from 'react'
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, Pressable } from 'react-native'
 
 const VideoCard = ({
   video: {
@@ -17,7 +17,7 @@ const VideoCard = ({
   const [play, setPlay] = useState(false)
 
   return (
-    <View className='flex-col items-center px-4 mb-14'>
+    <View className='mb-10 gap-3'>
       <View className='flex-row gap-3 items-start'>
         <View className='justify-center items-center flex-row flex-1'>
           <View className='w-[46px] h-[46px] rounded-lg border border-secondary justify-center items-center p-0.5'>
@@ -47,7 +47,7 @@ const VideoCard = ({
           </View>
         </View>
 
-        <View className='pt-2'>
+        <View className='my-auto'>
           <Image source={icons.menu} className='w-5 h-5' resizeMode='contain' />
         </View>
       </View>
@@ -62,7 +62,6 @@ const VideoCard = ({
             width: '100%',
             height: 240,
             borderRadius: 33,
-            marginTop: 12,
           }}
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls
@@ -74,9 +73,8 @@ const VideoCard = ({
           }}
         />
       ) : (
-        <TouchableOpacity
-          className='w-full h-60 rounded-xl mt-3 relative justify-center items-center'
-          activeOpacity={0.7}
+        <Pressable
+          className='w-full h-60 rounded-xl relative justify-center items-center active:opacity-70'
           onPress={() => setPlay(true)}
         >
           <Image
@@ -90,7 +88,7 @@ const VideoCard = ({
             className='w-12 h-12 absolute'
             resizeMode='contain'
           />
-        </TouchableOpacity>
+        </Pressable>
       )}
     </View>
   )
