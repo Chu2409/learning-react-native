@@ -11,6 +11,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { getAllVideos } from '@/lib/get-all-videos'
 import { getLatestVideos } from '@/lib/get-latest-videos'
 import { AppwriteVideo } from '@/interfaces/video.interface'
+import { createBookmark } from '@/lib/create-bookmark'
+import { deleteBookmark } from '@/lib/delete-bookmark'
 
 const Home = () => {
   const { user } = useGlobalContext()
@@ -27,12 +29,46 @@ const Home = () => {
     setRefreshing(false)
   }
 
+  const onCreate = async (videoId: string) => {
+    setRefreshing(true)
+    await createBookmark(user?.$id as string, videoId)
+
+    await refetch()
+
+    setRefreshing(false)
+  }
+
+  const onDelete = async (bookmarkId: string) => {
+    setRefreshing(true)
+    await deleteBookmark(bookmarkId)
+
+    await refetch()
+
+    setRefreshing(false)
+  }
+
   return (
     <SafeAreaView>
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <VideoCard video={item} className='px-4' />}
+        renderItem={({ item }) => {
+          const isBookmarked = item.bookmarks.find(
+            (bookmark) => bookmark.user.$id === user?.$id,
+          )
+
+          return (
+            <VideoCard
+              video={item}
+              className='px-4'
+              isBookmarked={!!isBookmarked}
+              bookmarkId={isBookmarked?.$id}
+              refresing={refreshing}
+              onCreate={onCreate}
+              onDelete={onDelete}
+            />
+          )
+        }}
         ListHeaderComponent={() => (
           <View className='mt-6'>
             <View className='justify-between items-start flex-row mb-6 px-4'>

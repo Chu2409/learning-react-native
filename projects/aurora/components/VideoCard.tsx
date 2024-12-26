@@ -7,14 +7,25 @@ import { Ionicons } from '@expo/vector-icons'
 
 const VideoCard = ({
   video: {
+    $id,
     title,
     thumbnail,
     video,
     creator: { username, avatar },
   },
+  bookmarkId,
+  isBookmarked,
+  onCreate,
+  onDelete,
+  refresing,
   className,
 }: {
   video: AppwriteVideo
+  isBookmarked: boolean
+  bookmarkId?: string
+  refresing?: boolean
+  onCreate: (videoId: string) => Promise<void>
+  onDelete: (bookmarkId: string) => Promise<void>
   className?: string
 }) => {
   const [play, setPlay] = useState(false)
@@ -101,16 +112,23 @@ const VideoCard = ({
         )}
 
         {optionesOpen && (
-          <View className='absolute bg-secondary/80 px-2 py-3 items-center gap-4 right-0 h-60 mt-1 rounded-r-xl'>
+          <View className='absolute bg-secondary/80 px-1 py-3 items-center gap-4 right-0 h-60 mt-1 rounded-r-xl'>
             <Pressable
               className='flex-row gap-3 items-center'
-              onPress={() => setOptionesOpen(false)}
+              onPress={async () => {
+                if (isBookmarked) {
+                  await onDelete(bookmarkId!)
+                } else {
+                  await onCreate($id)
+                }
+              }}
+              disabled={refresing}
             >
-              <Ionicons name='bookmark-outline' size={26} color='black' />
-            </Pressable>
-
-            <Pressable className='flex-row gap-3 items-center'>
-              <Ionicons name='heart-outline' size={26} color='black' />
+              <Ionicons
+                name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
+                size={30}
+                color='black'
+              />
             </Pressable>
           </View>
         )}

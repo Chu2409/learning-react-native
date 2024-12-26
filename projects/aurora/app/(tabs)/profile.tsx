@@ -5,25 +5,47 @@ import { icons } from '@/constants'
 import { useGlobalContext } from '@/context/GlobalProvider'
 import useAppwrite from '@/hooks/useAppwrite'
 import { router } from 'expo-router'
-import { useCallback } from 'react'
-import { View, FlatList, Image, Pressable } from 'react-native'
+import { useCallback, useState } from 'react'
+import { View, FlatList, Image, Pressable, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { getUserVideos } from '@/lib/get-user-videos'
 import { AppwriteVideo } from '@/interfaces/video.interface'
+import { createBookmark } from '@/lib/create-bookmark'
+import { deleteBookmark } from '@/lib/delete-bookmark'
 
 const Profile = () => {
   const { user, logout } = useGlobalContext()
+  const [refreshing, setRefreshing] = useState(false)
 
   const searchPostsMemoized = useCallback(
     () => getUserVideos(user?.$id as string),
     [user?.$id],
   )
 
-  const { data: posts } = useAppwrite<AppwriteVideo>(searchPostsMemoized)
+  const { data: posts, refetch } =
+    useAppwrite<AppwriteVideo>(searchPostsMemoized)
 
   const handleLogout = () => {
     logout()
     router.replace('/sign-in')
+  }
+
+  const onCreate = async (videoId: string) => {
+    setRefreshing(true)
+    await createBookmark(user?.$id as string, videoId)
+
+    await refetch()
+
+    setRefreshing(false)
+  }
+
+  const onDelete = async (bookmarkId: string) => {
+    setRefreshing(true)
+    await deleteBookmark(bookmarkId)
+
+    await refetch()
+
+    setRefreshing(false)
   }
 
   return (
@@ -31,7 +53,23 @@ const Profile = () => {
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <VideoCard video={item} className='px-4' />}
+        renderItem={({ item }) => {
+          const isBookmarked = item.bookmarks.find(
+            (bookmark) => bookmark.user.$id === user?.$id,
+          )
+
+          return (
+            <VideoCard
+              video={item}
+              className='px-4'
+              isBookmarked={!!isBookmarked}
+              bookmarkId={isBookmarked?.$id}
+              refresing={refreshing}
+              onCreate={onCreate}
+              onDelete={onDelete}
+            />
+          )
+        }}
         ListHeaderComponent={() => (
           <View className='w-full justify-center items-center mt-6 mb-12 px-4'>
             <Pressable
@@ -81,6 +119,7 @@ const Profile = () => {
             subtitle='Sube tu primer video'
           />
         )}
+        refreshControl={<RefreshControl refreshing={refreshing} />}
       />
     </SafeAreaView>
   )

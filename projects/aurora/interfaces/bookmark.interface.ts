@@ -6,3 +6,7 @@ export interface AppwriteBookmark extends Models.Document {
   user: AppwriteUser
   video: AppwriteVideo
 }
+
+export interface AppwriteBookmarkWithUser extends Models.Document {
+  user: AppwriteUser
+}

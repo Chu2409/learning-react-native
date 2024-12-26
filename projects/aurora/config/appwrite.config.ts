@@ -14,7 +14,6 @@ const validateEnvVariables = () => {
     'EXPO_PUBLIC_APPWRITE_USERS_COLLECTION_ID',
     'EXPO_PUBLIC_APPWRITE_VIDEOS_COLLECTION_ID',
     'EXPO_PUBLIC_APPWRITE_BOOKMARKS_COLLECTION_ID',
-    'EXPO_PUBLIC_APPWRITE_LIKES_COLLECTION_ID',
     'EXPO_PUBLIC_APPWRITE_STORAGE_ID',
   ]
 
@@ -36,7 +35,6 @@ export const config = {
   videosCollectionId: process.env.EXPO_PUBLIC_APPWRITE_VIDEOS_COLLECTION_ID!,
   bookmarksCollectionId:
     process.env.EXPO_PUBLIC_APPWRITE_BOOKMARKS_COLLECTION_ID!,
-  likesCollectionId: process.env.EXPO_PUBLIC_APPWRITE_LIKES_COLLECTION_ID!,
   storageId: process.env.EXPO_PUBLIC_APPWRITE_STORAGE_ID!,
 } as const
 
