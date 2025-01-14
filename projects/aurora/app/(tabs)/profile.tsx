@@ -30,6 +30,14 @@ const Profile = () => {
     router.replace('/sign-in')
   }
 
+  const onRefresh = async () => {
+    setRefreshing(true)
+
+    await refetch()
+
+    setRefreshing(false)
+  }
+
   const onCreate = async (videoId: string) => {
     setRefreshing(true)
     await createBookmark(user?.$id as string, videoId)
@@ -119,7 +127,9 @@ const Profile = () => {
             subtitle='Sube tu primer video'
           />
         )}
-        refreshControl={<RefreshControl refreshing={refreshing} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </SafeAreaView>
   )

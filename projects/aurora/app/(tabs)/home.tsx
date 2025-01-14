@@ -17,7 +17,8 @@ import { deleteBookmark } from '@/lib/delete-bookmark'
 const Home = () => {
   const { user } = useGlobalContext()
   const { data: posts, refetch } = useAppwrite<AppwriteVideo>(getAllVideos)
-  const { data: latestPosts } = useAppwrite<AppwriteVideo>(getLatestVideos)
+  const { data: latestPosts, refetch: refetchLatest } =
+    useAppwrite<AppwriteVideo>(getLatestVideos)
 
   const [refreshing, setRefreshing] = useState(false)
 
@@ -25,6 +26,7 @@ const Home = () => {
     setRefreshing(true)
 
     await refetch()
+    await refetchLatest()
 
     setRefreshing(false)
   }

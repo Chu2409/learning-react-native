@@ -4,7 +4,7 @@ import { useGlobalContext } from '@/context/GlobalProvider'
 import useAppwrite from '@/hooks/useAppwrite'
 import { router } from 'expo-router'
 import { useCallback, useState } from 'react'
-import { FlatList, Text } from 'react-native'
+import { FlatList, RefreshControl, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { getUserBookmaks } from '@/lib/get-user-bookmars'
 import { AppwriteBookmark } from '@/interfaces/bookmark.interface'
@@ -22,6 +22,14 @@ const Bookmark = () => {
     searchBookmarksMemoized,
   )
   const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = async () => {
+    setRefreshing(true)
+
+    await refetch()
+
+    setRefreshing(false)
+  }
 
   const onDelete = async (bookmarkId: string) => {
     setRefreshing(true)
@@ -64,6 +72,9 @@ const Bookmark = () => {
             onPress={() => router.push('/home')}
           />
         )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </SafeAreaView>
   )

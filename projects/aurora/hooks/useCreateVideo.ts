@@ -45,6 +45,7 @@ export const useCreateVideoForm = () => {
     getValues,
     watch,
     clearErrors,
+    reset,
     formState: { isSubmitting, errors },
   } = useForm<CreateVideoFormData>({
     resolver: zodResolver(createVideoSchema),
@@ -78,7 +79,7 @@ export const useCreateVideoForm = () => {
       setValue('video', {
         name: result.assets[0].fileName!,
         size: result.assets[0].fileSize!,
-        type: result.assets[0].type!,
+        type: result.assets[0].mimeType!,
         uri: result.assets[0].uri!,
       })
     }
@@ -95,7 +96,7 @@ export const useCreateVideoForm = () => {
       setValue('thumbnail', {
         name: result.assets[0].fileName!,
         size: result.assets[0].fileSize!,
-        type: result.assets[0].type!,
+        type: result.assets[0].mimeType!,
         uri: result.assets[0].uri!,
       })
     }
@@ -109,6 +110,8 @@ export const useCreateVideoForm = () => {
       })
 
       Alert.alert('Success', 'Post uploaded successfully')
+      reset()
+
       router.push('/home')
     } catch (error: any) {
       Alert.alert('An error occurred', error.message)

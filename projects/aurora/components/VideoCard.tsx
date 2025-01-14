@@ -39,7 +39,7 @@ const VideoCard = ({
           <View className='w-[46px] h-[46px] rounded-lg border border-secondary justify-center items-center p-0.5'>
             <Image
               source={{
-                uri: 'https://cloud.appwrite.io/v1/avatars/initials?name=Chudan&project=674b756a002b26a7647d',
+                uri: avatar,
               }}
               className='w-full h-full rounded-lg'
               resizeMode='cover'
@@ -58,7 +58,7 @@ const VideoCard = ({
               className='text-xs text-gray-100 font-pregular'
               numberOfLines={1}
             >
-              {username}
+              {username || 'Anónimo'}
             </Text>
           </View>
         </View>
