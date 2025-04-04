@@ -15,7 +15,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.chu2409.pushapp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -42,7 +44,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "1e2db1fe-26b3-44cc-9ef8-610b736b49f8"
+        "projectId": "68199284-ab7d-4da4-be09-f11d5e106657"
       }
     },
     "owner": "chu2409"

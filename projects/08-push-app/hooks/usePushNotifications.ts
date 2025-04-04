@@ -12,24 +12,11 @@ Notifications.setNotificationHandler({
   }),
 })
 
-async function sendPushNotification(expoPushToken: string) {
-  const message = {
-    to: expoPushToken,
-    sound: 'default',
-    title: 'Original Title',
-    body: 'And here is the body!',
-    data: { someData: 'goes here' },
-  }
-
-  await fetch('https://exp.host/--/api/v2/push/send', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Accept-encoding': 'gzip, deflate',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-  })
+interface SendPushOptions {
+  to: string[]
+  title: string
+  body: string
+  data?: Record<string, any>
 }
 
 function handleRegistrationError(errorMessage: string) {
@@ -49,23 +36,28 @@ async function registerForPushNotificationsAsync() {
 
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync()
+
     let finalStatus = existingStatus
+
     if (existingStatus !== 'granted') {
       const { status } = await Notifications.requestPermissionsAsync()
       finalStatus = status
     }
+
     if (finalStatus !== 'granted') {
       handleRegistrationError(
         'Permission not granted to get push token for push notification!',
       )
       return
     }
+
     const projectId =
       Constants?.expoConfig?.extra?.eas?.projectId ??
       Constants?.easConfig?.projectId
     if (!projectId) {
       handleRegistrationError('Project ID not found')
     }
+
     try {
       const pushTokenString = (
         await Notifications.getExpoPushTokenAsync({
@@ -82,22 +74,54 @@ async function registerForPushNotificationsAsync() {
   }
 }
 
-export default function App() {
+async function sendPushNotification(options: SendPushOptions) {
+  const { to, title, body, data } = options
+
+  const message = {
+    to,
+    sound: 'default',
+    title,
+    body,
+    data: data || {},
+  }
+
+  await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  })
+}
+
+let areListenersReady = false
+
+export const usePushNotifications = () => {
   const [expoPushToken, setExpoPushToken] = useState('')
-  const [notification, setNotification] = useState<
-    Notifications.Notification | undefined
-  >(undefined)
+  const [notifications, setNotifications] = useState<
+    Notifications.Notification[]
+  >([])
   const notificationListener = useRef<Notifications.EventSubscription>()
   const responseListener = useRef<Notifications.EventSubscription>()
 
   useEffect(() => {
+    if (areListenersReady) return
+
     registerForPushNotificationsAsync()
       .then((token) => setExpoPushToken(token ?? ''))
       .catch((error: any) => setExpoPushToken(`${error}`))
+  }, [])
+
+  useEffect(() => {
+    if (areListenersReady) return
+
+    areListenersReady = true
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification)
+        setNotifications((prev) => [...prev, notification])
       })
 
     responseListener.current =
@@ -115,27 +139,9 @@ export default function App() {
     }
   }, [])
 
-  return (
-    <View
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}
-    >
-      <Text>Your Expo push token: {expoPushToken}</Text>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text>
-          Title: {notification && notification.request.content.title}{' '}
-        </Text>
-        <Text>Body: {notification && notification.request.content.body}</Text>
-        <Text>
-          Data:{' '}
-          {notification && JSON.stringify(notification.request.content.data)}
-        </Text>
-      </View>
-      <Button
-        title='Press to Send Notification'
-        onPress={async () => {
-          await sendPushNotification(expoPushToken)
-        }}
-      />
-    </View>
-  )
+  return {
+    expoPushToken,
+    notifications,
+    sendPushNotification,
+  }
 }
