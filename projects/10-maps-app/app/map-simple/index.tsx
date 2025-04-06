@@ -1,7 +1,18 @@
+import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from 'expo-router'
+import { useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import MapView, { Marker } from 'react-native-maps'
 
 const MapsScreen = () => {
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <Ionicons name='camera-outline' size={24} />,
+    })
+  }, [])
+
   return (
     <View style={styles.container}>
       <MapView
